@@ -1,6 +1,6 @@
 import {
-  WorkExperiencePayload,
   WorkExperienceEntity,
+  WorkExperienceDbPayload,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
 
@@ -23,7 +23,7 @@ export class SQLiteWorkExperienceRepository
     return rows;
   }
 
-  insert(data: WorkExperiencePayload): Promise<void> {
+  insert(data: WorkExperienceDbPayload): Promise<void> {
     try {
       const statement = this.dbConnection
         .prepare(`insert into WorkExperiences (CompanyName, JobTitle, WorkCityLocation, StartDate, EndDate, Description)

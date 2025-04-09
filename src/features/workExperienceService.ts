@@ -2,6 +2,7 @@ import { Request } from "express";
 import {
   WorkExperiencePayload,
   WorkExperienceEntity,
+  WorkExperienceDbPayload,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
 
@@ -33,11 +34,19 @@ export class WorkExperienceService {
    * Inserts a new work experiences into the database using request body data.
    *
    * @param req - Express Request containing the validated work experiences payload
+   * @throws Error if start date is before end date
    */
   async createWorkExperience(
     req: Request<unknown, unknown, WorkExperiencePayload>
   ): Promise<void> {
-    await this.repo.insert(req.body);
+    if (req.body.startDate > req.body.endDate)
+      throw new Error("Start date must be before end date.");
+    const payload: WorkExperienceDbPayload = {
+      ...req.body,
+      startDate: req.body.startDate.toISOString().split("T")[0],
+      endDate: req.body.endDate.toISOString().split("T")[0],
+    };
+    await this.repo.insert(payload);
   }
 
   /**

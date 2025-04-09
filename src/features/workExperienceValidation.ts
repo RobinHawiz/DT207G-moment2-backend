@@ -1,65 +1,79 @@
-import { body, ValidationChain } from "express-validator";
+import z, { ZodError } from "zod";
+import { Request, Response, NextFunction } from "express";
+
+const WorkExperienceSchema = z.object({
+  id: z.number().optional(),
+  companyName: z.string().min(1).max(100),
+  jobTitle: z.string().min(1).max(100),
+  workCityLocation: z.string().min(1).max(100),
+  startDate: z
+    .string()
+    .date()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Date must be in YYYY-MM-DD format.",
+    })
+    .transform((val) => new Date(val)),
+  endDate: z
+    .string()
+    .date()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Date must be in YYYY-MM-DD format",
+    })
+    .transform((val) => new Date(val)),
+  description: z.string().min(1).max(1000),
+});
+
+type WorkExperience = z.infer<typeof WorkExperienceSchema>;
 
 /**
- * Validation chain for creating a new work experience.
+ * Validation for creating or updating a new work experience.
  *
  * Validates the request body to ensure required fields are present and formatted correctly:
- * - companyName: non-empty string
- * - jobTitle: non-empty string
- * - workCityLocation: non-empty string
- * - startDate: non-empty string
- * - endDate: non-empty string
- * - description: non-empty string
+ * - id: optional non-empty number (is required when performing update operations)
+ * - companyName: non-empty string, max 100 characters
+ * - jobTitle: non-empty string, max 100 characters
+ * - workCityLocation: non-empty string, max 100 characters
+ * - startDate: non-empty string with date format: YYYY-MM-DD
+ * - endDate: non-empty string with date format: YYYY-MM-DD
+ * - description: non-empty string, max 1000 characters
  *
  */
-export const workExperienceValidation: Array<ValidationChain> = [
-  body("companyName")
-    .notEmpty()
-    .withMessage("companyName cannot be empty.")
-    .isString()
-    .withMessage("companyName must be a string."),
+export const workExperienceValidation = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const data: WorkExperience = req.body;
+  try {
+    req.body = WorkExperienceSchema.parse(data);
+    next();
+  } catch (error) {
+    res.status(400).json({ errors: (error as ZodError).issues });
+  }
+};
 
-  body("jobTitle")
-    .notEmpty()
-    .withMessage("jobTitle cannot be empty.")
-    .isString()
-    .withMessage("jobTitle must be a string."),
+const WorkExperienceIdSchema = z.object({
+  id: z.number(),
+});
 
-  body("workCityLocation")
-    .notEmpty()
-    .withMessage("workCityLocation cannot be empty.")
-    .isString()
-    .withMessage("workCityLocation must be a string."),
-
-  body("startDate")
-    .notEmpty()
-    .withMessage("startDate cannot be empty.")
-    .isString()
-    .withMessage("startDate must be a string."),
-
-  body("endDate")
-    .notEmpty()
-    .withMessage("endDate cannot be empty.")
-    .isString()
-    .withMessage("endDate must be a string."),
-
-  body("description")
-    .notEmpty()
-    .withMessage("description cannot be empty.")
-    .isString()
-    .withMessage("description must be a string."),
-];
+type WorkExperienceId = z.infer<typeof WorkExperienceIdSchema>;
 
 /**
- * Validation chain for work experience ID.
+ * Validation for work experience ID.
  *
  * Used when performing operations that require a work experience ID (e.g., delete).
  * - id: required, must be an integer
  */
-export const workExperienceIdValidation: Array<ValidationChain> = [
-  body("id")
-    .notEmpty()
-    .withMessage("Id cannot be empty.")
-    .isInt()
-    .withMessage("Id must be an integer."),
-];
+export const workExperienceIdValidation = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const data: WorkExperienceId = req.body;
+  try {
+    req.body = WorkExperienceIdSchema.parse(data);
+    next();
+  } catch (error) {
+    res.status(400).json({ errors: (error as ZodError).issues });
+  }
+};
