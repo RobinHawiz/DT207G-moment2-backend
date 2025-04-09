@@ -1,3 +1,4 @@
+import { DomainError } from "../errors/DomainError";
 import { WorkExperienceService } from "./workExperienceService";
 import { Request, Response } from "express";
 
@@ -43,8 +44,12 @@ export async function insertWorkExperience(
     await workExperienceService.createWorkExperience(req);
     res.status(201).json({ message: "Work experience inserted successfully" });
   } catch (error: any) {
-    console.error("Error inserting workExperience data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    if (error instanceof DomainError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error("Error inserting workExperience data:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 }
 

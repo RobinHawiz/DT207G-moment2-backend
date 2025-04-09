@@ -5,6 +5,7 @@ import {
   WorkExperienceDbPayload,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
+import { DomainError } from "../errors/DomainError";
 
 /**
  * Service layer for handling business logic related to work experience entities.
@@ -40,7 +41,7 @@ export class WorkExperienceService {
     req: Request<unknown, unknown, WorkExperiencePayload>
   ): Promise<void> {
     if (req.body.startDate > req.body.endDate)
-      throw new Error("Start date must be before end date.");
+      throw new DomainError("Start date must be before end date.");
     const payload: WorkExperienceDbPayload = {
       ...req.body,
       startDate: req.body.startDate.toISOString().split("T")[0],
