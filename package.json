@@ -1,0 +1,43 @@
+{
+  "name": "ts-api-boilerplate",
+  "version": "1.0.0",
+  "description": "A clean, modular Express + TypeScript backend starter.",
+  "main": "dist/server.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rimraf dist && tsc && npm run copy-db",
+    "start": "node dist/server.js",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\"",
+    "clean": "rimraf dist",
+    "copy-db": "cpx db/CVDb.db dist/db"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobinHawiz/ts-api-boilerplate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobinHawiz/ts-api-boilerplate/issues"
+  },
+  "homepage": "https://github.com/RobinHawiz/ts-api-boilerplate#readme",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.14",
+    "better-sqlite3": "^11.9.1",
+    "concurrently": "^9.1.2",
+    "cpx": "^1.2.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
+}
