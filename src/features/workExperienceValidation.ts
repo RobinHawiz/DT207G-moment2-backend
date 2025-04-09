@@ -1,29 +1,5 @@
-import z, { ZodError } from "zod";
+import z, { ZodError, ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
-
-const WorkExperienceSchema = z.object({
-  id: z.number().optional(),
-  companyName: z.string().min(1).max(100),
-  jobTitle: z.string().min(1).max(100),
-  workCityLocation: z.string().min(1).max(100),
-  startDate: z
-    .string()
-    .date()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "Date must be in YYYY-MM-DD format.",
-    })
-    .transform((val) => new Date(val)),
-  endDate: z
-    .string()
-    .date()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "Date must be in YYYY-MM-DD format",
-    })
-    .transform((val) => new Date(val)),
-  description: z.string().min(1).max(1000),
-});
-
-type WorkExperience = z.infer<typeof WorkExperienceSchema>;
 
 /**
  * Validation for creating or updating a new work experience.
@@ -38,25 +14,32 @@ type WorkExperience = z.infer<typeof WorkExperienceSchema>;
  * - description: non-empty string, max 1000 characters
  *
  */
-export const workExperienceValidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  const data: WorkExperience = req.body;
-  try {
-    req.body = WorkExperienceSchema.parse(data);
-    next();
-  } catch (error) {
-    res.status(400).json({ errors: (error as ZodError).issues });
-  }
-};
 
-const WorkExperienceIdSchema = z.object({
-  id: z.number(),
+export const WorkExperienceSchema = z.object({
+  id: z.number().optional(),
+  companyName: z.string().min(1).max(100),
+  jobTitle: z.string().min(1).max(100),
+  workCityLocation: z.string().min(1).max(100),
+  startDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Date must be in YYYY-MM-DD format.",
+    })
+    .refine((val) => !!Date.parse(val), {
+      message: "Invalid date.",
+    })
+    .transform((val) => new Date(val)),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Date must be in YYYY-MM-DD format",
+    })
+    .refine((val) => !!Date.parse(val), {
+      message: "Invalid date.",
+    })
+    .transform((val) => new Date(val)),
+  description: z.string().min(1).max(1000),
 });
-
-type WorkExperienceId = z.infer<typeof WorkExperienceIdSchema>;
 
 /**
  * Validation for work experience ID.
@@ -64,16 +47,18 @@ type WorkExperienceId = z.infer<typeof WorkExperienceIdSchema>;
  * Used when performing operations that require a work experience ID (e.g., delete).
  * - id: required, must be an integer
  */
-export const workExperienceIdValidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  const data: WorkExperienceId = req.body;
-  try {
-    req.body = WorkExperienceIdSchema.parse(data);
-    next();
-  } catch (error) {
-    res.status(400).json({ errors: (error as ZodError).issues });
-  }
-};
+
+export const WorkExperienceIdSchema = z.object({
+  id: z.number(),
+});
+
+export const validate =
+  (schema: ZodSchema) =>
+  (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      req.body = schema.parse(req.body);
+      next();
+    } catch (error) {
+      res.status(400).json({ errors: (error as ZodError).issues });
+    }
+  };

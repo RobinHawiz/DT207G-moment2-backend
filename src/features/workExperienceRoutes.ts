@@ -6,10 +6,10 @@ import {
   deleteWorkExperience,
 } from "./workExperienceController";
 import {
-  workExperienceValidation,
-  workExperienceIdValidation,
+  validate,
+  WorkExperienceSchema,
+  WorkExperienceIdSchema,
 } from "./workExperienceValidation";
-import { validationResult } from "express-validator";
 import { SQLiteWorkExperienceRepository } from "./sqliteWorkExperienceRepository";
 
 /**
@@ -44,13 +44,8 @@ export function workExperienceRoutes(
    */
   router.post(
     "/insert",
-    workExperienceValidation,
+    validate(WorkExperienceSchema),
     async (req: Request, res: Response) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        res.status(400).json({ errors: errors.array() });
-        return;
-      }
       await insertWorkExperience(req, res, workExperienceService);
     }
   );
@@ -61,13 +56,8 @@ export function workExperienceRoutes(
    */
   router.delete(
     "/delete",
-    workExperienceIdValidation,
+    validate(WorkExperienceIdSchema),
     async (req: Request, res: Response) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        res.status(400).json({ errors: errors.array() });
-        return;
-      }
       await deleteWorkExperience(req, res, workExperienceService);
     }
   );
