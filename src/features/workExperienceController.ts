@@ -2,13 +2,13 @@ import { WorkExperienceService } from "./workExperienceService";
 import { Request, Response } from "express";
 
 /**
- * Handles GET /example
+ * Handles GET /work-experience
  *
- * Retrieves all example records and returns them in the response.
+ * Responds with all work experience records and status 200.
  *
- * @param _req - Unused Express Request object
- * @param res - Express Response object
- * @param WorkExperienceService - Injected service for retrieving example
+ * @param _req - Express request object (unused)
+ * @param res - Express response object
+ * @param workExperienceService - Service for retrieving word experience data
  */
 export async function getAllWorkExperiences(
   _req: Request,
@@ -25,13 +25,14 @@ export async function getAllWorkExperiences(
 }
 
 /**
- * Handles POST /example/insert
+ * Handles POST /work-experience/insert
  *
- * Inserts a new example using the request body and returns a success message.
+ * Creates a new work experience from the request body.
+ * Responds with status 201 and a success message.
  *
- * @param req - Express Request object (expected to contain validated example payload)
- * @param res - Express Response object
- * @param workExperienceService - Injected service for inserting example
+ * @param req - Express request object containing a validated work experience payload)
+ * @param res - Express response object
+ * @param workExperienceService - Service for inserting word experience data
  */
 export async function insertWorkExperience(
   req: Request,
@@ -48,13 +49,14 @@ export async function insertWorkExperience(
 }
 
 /**
- * Handles DELETE /example/delete
+ * Handles DELETE /work-experience/delete
  *
- * Deletes an example based on the request input and returns a success message.
+ * Deletes a work experience based on request input.
+ * Responds with status 204 on success.
  *
- * @param req - Express Request object (expected to contain validated example ID)
- * @param res - Express Response object
- * @param workExperienceService - Injected service for deleting example
+ * @param req - Express request object containing the ID of the work experience to delete
+ * @param res - Express response object
+ * @param workExperienceService - Service for deleting work experience data
  */
 export async function deleteWorkExperience(
   req: Request,
