@@ -35,7 +35,8 @@
     "express-validator": "^7.2.1",
     "nodemon": "^3.1.9",
     "rimraf": "^6.0.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "zod": "^3.24.2"
   },
   "dependencies": {
     "cors": "^2.8.5"
