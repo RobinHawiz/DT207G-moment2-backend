@@ -31,12 +31,7 @@ export function workExperienceRoutes(
    * Fetches all available examples.
    */
   router.get("/", async (req: Request, res: Response) => {
-    try {
-      await getAllWorkExperiences(req, res, workExperienceService);
-    } catch (error: any) {
-      console.error("Error in GET /work-experience:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+    await getAllWorkExperiences(req, res, workExperienceService);
   });
 
   /**
