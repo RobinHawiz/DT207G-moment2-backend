@@ -2,10 +2,9 @@ import { Request } from "express";
 import {
   WorkExperiencePayload,
   WorkExperienceEntity,
-  WorkExperienceDbPayload,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
-import { DomainError } from "../errors/DomainError";
+import { toDbPayload } from "./workExperienceUtils";
 
 /**
  * Service layer for handling business logic related to work experience entities.
@@ -35,18 +34,12 @@ export class WorkExperienceService {
    * Inserts a new work experiences into the database using request body data.
    *
    * @param req - Express Request containing the validated work experiences payload
-   * @throws Error if start date is before end date
+   * @throws DomainError if startDate is after endDate
    */
   async createWorkExperience(
     req: Request<unknown, unknown, WorkExperiencePayload>
   ): Promise<void> {
-    if (req.body.startDate > req.body.endDate)
-      throw new DomainError("Start date must be before end date.");
-    const payload: WorkExperienceDbPayload = {
-      ...req.body,
-      startDate: req.body.startDate.toISOString().split("T")[0],
-      endDate: req.body.endDate.toISOString().split("T")[0],
-    };
+    const payload = toDbPayload(req.body);
     await this.repo.insert(payload);
   }
 
@@ -54,18 +47,12 @@ export class WorkExperienceService {
    * Updates an existing work experiences in the database using request body data.
    *
    * @param req - Express Request containing the validated work experiences entity
-   * @throws Error if start date is before end date
+   * @throws DomainError if startDate is after endDate
    */
   async updateWorkExperience(
     req: Request<unknown, unknown, WorkExperienceEntity>
   ): Promise<void> {
-    if (req.body.startDate > req.body.endDate)
-      throw new DomainError("Start date must be before end date.");
-    const payload: WorkExperienceDbPayload = {
-      ...req.body,
-      startDate: req.body.startDate.toISOString().split("T")[0],
-      endDate: req.body.endDate.toISOString().split("T")[0],
-    };
+    const payload = toDbPayload(req.body);
     await this.repo.update(req.body.id, payload);
   }
 
