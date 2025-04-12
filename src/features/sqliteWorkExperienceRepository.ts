@@ -36,6 +36,25 @@ export class SQLiteWorkExperienceRepository
     }
   }
 
+  update(id: number, data: WorkExperienceDbPayload): Promise<void> {
+    try {
+      const params = {
+        ...data,
+        id,
+      };
+      const statement = this.dbConnection.prepare(
+        `update WorkExperiences 
+         set CompanyName = @companyName, JobTitle = @jobTitle, WorkCityLocation = @workCityLocation, StartDate = @startDate, EndDate = @endDate, Description = @description 
+         where Id = @id`
+      );
+      statement.run(params);
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Database update error:", error);
+      throw error;
+    }
+  }
+
   deleteById(id: number): Promise<void> {
     try {
       const statement = this.dbConnection.prepare(

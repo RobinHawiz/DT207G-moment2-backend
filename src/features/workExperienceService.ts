@@ -51,6 +51,25 @@ export class WorkExperienceService {
   }
 
   /**
+   * Updates an existing work experiences in the database using request body data.
+   *
+   * @param req - Express Request containing the validated work experiences entity
+   * @throws Error if start date is before end date
+   */
+  async updateWorkExperience(
+    req: Request<unknown, unknown, WorkExperienceEntity>
+  ): Promise<void> {
+    if (req.body.startDate > req.body.endDate)
+      throw new DomainError("Start date must be before end date.");
+    const payload: WorkExperienceDbPayload = {
+      ...req.body,
+      startDate: req.body.startDate.toISOString().split("T")[0],
+      endDate: req.body.endDate.toISOString().split("T")[0],
+    };
+    await this.repo.update(req.body.id, payload);
+  }
+
+  /**
    * Deletes a work experience if it exists in the database.
    *
    * @param req - Express Request containing work experience ID in the body

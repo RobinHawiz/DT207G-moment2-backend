@@ -27,6 +27,14 @@ export interface WorkExperienceRepository {
    */
   insert(data: WorkExperienceDbPayload): Promise<void>;
   /**
+   * Updates an existing work experience in the database.
+   *
+   * @param id - The ID of the work experience to update.
+   * @param data - A validated work experience db payload containing required fields.
+   * @throws If the database operation fails
+   */
+  update(id: number, data: WorkExperienceDbPayload): Promise<void>;
+  /**
    * Deletes a work experience from the database by ID.
    *
    * @param id - The ID of the work experience to delete.

@@ -31,9 +31,9 @@ export async function getAllWorkExperiences(
  * Creates a new work experience from the request body.
  * Responds with status 201 and a success message.
  *
- * @param req - Express request object containing a validated work experience payload)
+ * @param req - Express request object containing a validated work experience payload
  * @param res - Express response object
- * @param workExperienceService - Service for inserting word experience data
+ * @param workExperienceService - Service for inserting work experience data
  */
 export async function insertWorkExperience(
   req: Request,
@@ -48,6 +48,34 @@ export async function insertWorkExperience(
       res.status(error.statusCode).json({ error: error.message });
     } else {
       console.error("Error inserting workExperience data:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
+/**
+ * Handles PUT /work-experience/update
+ *
+ * Updates an existing work experience based on request input.
+ * Responds with status 204 on success.
+ *
+ * @param req - Express request object containing a validated work experience entity
+ * @param res - Express response object
+ * @param workExperienceService - Service for updating work experience data
+ */
+export async function updateWorkExperience(
+  req: Request,
+  res: Response,
+  workExperienceService: WorkExperienceService
+): Promise<void> {
+  try {
+    await workExperienceService.updateWorkExperience(req);
+    res.status(204).end();
+  } catch (error: any) {
+    if (error instanceof DomainError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error("Error updating workExperience data:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }

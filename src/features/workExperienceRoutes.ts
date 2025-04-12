@@ -3,6 +3,7 @@ import { WorkExperienceService } from "./workExperienceService";
 import {
   getAllWorkExperiences,
   insertWorkExperience,
+  updateWorkExperience,
   deleteWorkExperience,
 } from "./workExperienceController";
 import {
@@ -47,6 +48,18 @@ export function workExperienceRoutes(
     validate(WorkExperienceSchema),
     async (req: Request, res: Response) => {
       await insertWorkExperience(req, res, workExperienceService);
+    }
+  );
+
+  /**
+   * PUT /work-experience/update
+   * Updates an exisiting work experience after validating the input.
+   */
+  router.put(
+    "/update",
+    validate(WorkExperienceSchema),
+    async (req: Request, res: Response) => {
+      await updateWorkExperience(req, res, workExperienceService);
     }
   );
 
