@@ -8,7 +8,8 @@ import {
 } from "./workExperienceController";
 import {
   validate,
-  WorkExperienceSchema,
+  WorkExperienceEntitySchema,
+  WorkExperiencePayloadSchema,
   WorkExperienceIdSchema,
 } from "./workExperienceValidation";
 import { SQLiteWorkExperienceRepository } from "./sqliteWorkExperienceRepository";
@@ -40,7 +41,7 @@ export function workExperienceRoutes(
    */
   router.post(
     "/insert",
-    validate(WorkExperienceSchema),
+    validate(WorkExperiencePayloadSchema),
     async (req: Request, res: Response) => {
       await insertWorkExperience(req, res, workExperienceService);
     }
@@ -52,7 +53,7 @@ export function workExperienceRoutes(
    */
   router.put(
     "/update",
-    validate(WorkExperienceSchema),
+    validate(WorkExperienceEntitySchema),
     async (req: Request, res: Response) => {
       await updateWorkExperience(req, res, workExperienceService);
     }
