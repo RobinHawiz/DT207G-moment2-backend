@@ -44,7 +44,7 @@ export class WorkExperienceService {
   }
 
   /**
-   * Updates an existing work experiences in the database using request body data.
+   * Updates an existing work experience if it exists in the database using request body data.
    *
    * @param req - Express Request containing the validated work experiences entity
    * @throws DomainError if startDate is after endDate
@@ -52,6 +52,10 @@ export class WorkExperienceService {
   async updateWorkExperience(
     req: Request<unknown, unknown, WorkExperienceEntity>
   ): Promise<void> {
+    const workExperienceExists: boolean = await this.repo.exists(req.body.id);
+    if (!workExperienceExists) {
+      throw new Error("The work experience with this Id does not exist!");
+    }
     const payload = toDbPayload(req.body);
     await this.repo.update(req.body.id, payload);
   }
