@@ -100,7 +100,11 @@ export async function deleteWorkExperience(
     await workExperienceService.deleteWorkExperience(req);
     res.status(204).end();
   } catch (error: any) {
-    console.error("Error deleting workExperience:", error);
-    res.status(404).json({ error: error.message });
+    if (error instanceof DomainError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error("Error deleteing workExperience data:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 }
