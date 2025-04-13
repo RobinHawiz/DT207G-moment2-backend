@@ -100,13 +100,13 @@ Returns all work experiences from the database.
 ```json
 [
     {
-        "Id": 1,
-        "CompanyName": "Prisma",
-        "JobTitle": "DBA",
-        "WorkCityLocation": "New York",
-        "StartDate": "2020-05-20",
-        "EndDate": "2024-10-11",
-        "Description": "Worked with maintaining the company db."
+        "id": 1,
+        "companyName": "Prisma",
+        "jobTitle": "DBA",
+        "workCityLocation": "New York",
+        "startDate": "2020-05-20",
+        "endDate": "2024-10-11",
+        "description": "Worked with maintaining the company db."
     }
 ]
 ```

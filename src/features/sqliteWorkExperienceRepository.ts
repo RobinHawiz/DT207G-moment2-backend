@@ -18,7 +18,9 @@ export class SQLiteWorkExperienceRepository
   ) {}
   async findAll(): Promise<Array<WorkExperienceEntity>> {
     const rows = this.dbConnection
-      .prepare("select * from WorkExperiences")
+      .prepare(
+        "select CompanyName as companyName, JobTitle as jobTitle, WorkCityLocation as workCityLocation, StartDate as startDate, EndDate as endDate, Description as description from WorkExperiences"
+      )
       .all() as Array<WorkExperienceEntity>;
     return rows;
   }
