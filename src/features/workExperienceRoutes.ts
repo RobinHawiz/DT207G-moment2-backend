@@ -6,13 +6,9 @@ import {
   updateWorkExperience,
   deleteWorkExperience,
 } from "./workExperienceController";
-import {
-  validate,
-  WorkExperienceEntitySchema,
-  WorkExperiencePayloadSchema,
-  WorkExperienceIdSchema,
-} from "./workExperienceValidation";
+import { validate, WorkExperienceSchema } from "./workExperienceValidation";
 import { SQLiteWorkExperienceRepository } from "./sqliteWorkExperienceRepository";
+import { WorkExperiencePayload } from "../models/workExperienceEntity";
 
 /**
  * Factory function to create work experience related API routes.
@@ -28,7 +24,7 @@ export function workExperienceRoutes(
   );
 
   /**
-   * GET /work-experience
+   * GET /api/work-experience
    * Fetches all available examples.
    */
   router.get("/", async (req: Request, res: Response) => {
@@ -36,40 +32,39 @@ export function workExperienceRoutes(
   });
 
   /**
-   * POST /work-experience/insert
+   * POST /api/work-experience
    * Inserts a new work experience after validating the request body.
    */
   router.post(
-    "/insert",
-    validate(WorkExperiencePayloadSchema),
+    "/",
+    validate(WorkExperienceSchema),
     async (req: Request, res: Response) => {
       await insertWorkExperience(req, res, workExperienceService);
     }
   );
 
   /**
-   * PUT /work-experience/update
+   * PUT /api/work-experience/:id
    * Updates an exisiting work experience after validating the input.
    */
   router.put(
-    "/update",
-    validate(WorkExperienceEntitySchema),
-    async (req: Request, res: Response) => {
+    "/:id",
+    validate(WorkExperienceSchema),
+    async (
+      req: Request<{ id: string }, unknown, WorkExperiencePayload>,
+      res: Response
+    ) => {
       await updateWorkExperience(req, res, workExperienceService);
     }
   );
 
   /**
-   * DELETE /work-experience/delete
-   * Deletes a work experience by ID after validating the input.
+   * DELETE /api/work-experience/:id
+   * Deletes an exisiting work experience.
    */
-  router.delete(
-    "/delete",
-    validate(WorkExperienceIdSchema),
-    async (req: Request, res: Response) => {
-      await deleteWorkExperience(req, res, workExperienceService);
-    }
-  );
+  router.delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
+    await deleteWorkExperience(req, res, workExperienceService);
+  });
 
   return router;
 }

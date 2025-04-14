@@ -1,4 +1,3 @@
-import { Request } from "express";
 import {
   WorkExperiencePayload,
   WorkExperienceEntity,
@@ -34,44 +33,44 @@ export class WorkExperienceService {
   /**
    * Inserts a new work experiences into the database using request body data.
    *
-   * @param req - Express Request containing the validated work experiences payload
+   * @param payload - A validated work experiences payload
    * @throws DomainError if startDate is after endDate
    */
-  async createWorkExperience(
-    req: Request<unknown, unknown, WorkExperiencePayload>
-  ): Promise<void> {
-    const payload = toDbPayload(req.body);
-    await this.repo.insert(payload);
+  async createWorkExperience(payload: WorkExperiencePayload): Promise<void> {
+    const dbPayload = toDbPayload(payload);
+    await this.repo.insert(dbPayload);
   }
 
   /**
-   * Updates an existing work experience if it exists in the database using request body data.
+   * Updates an existing work experience if it exists in the database using a payload.
    *
-   * @param req - Express Request containing the validated work experiences entity
+   * @param id - A numeric work experience ID
+   * @param payload - A validated work experience payload
    * @throws DomainError if startDate is after endDate
+   * @throws DomainError if the work experience does not exist
    */
   async updateWorkExperience(
-    req: Request<unknown, unknown, WorkExperienceEntity>
+    id: number,
+    payload: WorkExperiencePayload
   ): Promise<void> {
-    const workExperienceExists: boolean = await this.repo.exists(req.body.id);
+    const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
       throw new DomainError(
         "id",
         "The work experience with this Id does not exist!"
       );
     }
-    const payload = toDbPayload(req.body);
-    await this.repo.update(req.body.id, payload);
+    const dbPayload = toDbPayload(payload);
+    await this.repo.update(id, dbPayload);
   }
 
   /**
    * Deletes a work experience if it exists in the database.
    *
-   * @param req - Express Request containing work experience ID in the body
-   * @throws Error if the work experience does not exist
+   * @param id - A numeric work experience ID
+   * @throws DomainError if the work experience does not exist
    */
-  async deleteWorkExperience(req: Request): Promise<void> {
-    const { id }: { id: number } = req.body;
+  async deleteWorkExperience(id: number): Promise<void> {
     const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
       throw new DomainError(
