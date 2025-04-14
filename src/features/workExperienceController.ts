@@ -1,4 +1,4 @@
-import { DomainError } from "../errors/DomainError";
+import { DomainError } from "../errors/domainError";
 import { WorkExperienceService } from "./workExperienceService";
 import { Request, Response } from "express";
 

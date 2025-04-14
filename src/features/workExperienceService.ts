@@ -5,7 +5,7 @@ import {
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
 import { toDbPayload } from "./workExperienceUtils";
-import { DomainError } from "../errors/DomainError";
+import { DomainError } from "../errors/domainError";
 
 /**
  * Service layer for handling business logic related to work experience entities.
