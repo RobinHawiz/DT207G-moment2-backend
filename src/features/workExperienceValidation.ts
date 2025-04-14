@@ -1,5 +1,6 @@
 import z, { ZodError, ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
+import { formatZodError } from "../errors/formatZodError";
 
 /**
  * Validation schema for a complete work experience entity.
@@ -80,6 +81,12 @@ export const validate =
       req.body = schema.parse(req.body);
       next();
     } catch (error) {
-      res.status(400).json({ errors: (error as ZodError).issues });
+      if (error instanceof ZodError) {
+        res.status(400).json(formatZodError(error));
+      } else {
+        res
+          .status(500)
+          .json({ field: "server", message: "Internal Server Error" });
+      }
     }
   };

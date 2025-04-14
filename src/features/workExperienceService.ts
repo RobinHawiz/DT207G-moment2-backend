@@ -55,7 +55,10 @@ export class WorkExperienceService {
   ): Promise<void> {
     const workExperienceExists: boolean = await this.repo.exists(req.body.id);
     if (!workExperienceExists) {
-      throw new DomainError("The work experience with this Id does not exist!");
+      throw new DomainError(
+        "id",
+        "The work experience with this Id does not exist!"
+      );
     }
     const payload = toDbPayload(req.body);
     await this.repo.update(req.body.id, payload);
@@ -71,7 +74,10 @@ export class WorkExperienceService {
     const { id }: { id: number } = req.body;
     const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
-      throw new DomainError("The work experience with this Id does not exist!");
+      throw new DomainError(
+        "id",
+        "The work experience with this Id does not exist!"
+      );
     }
     await this.repo.deleteById(id);
   }

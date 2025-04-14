@@ -21,7 +21,7 @@ export async function getAllWorkExperiences(
     res.status(200).json(workExperiences);
   } catch (error: any) {
     console.error("Error retrieving work experience data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ field: "server", message: "Internal Server Error" });
   }
 }
 
@@ -29,7 +29,7 @@ export async function getAllWorkExperiences(
  * Handles POST /work-experience/insert
  *
  * Creates a new work experience from the request body.
- * Responds with status 201 and a success message.
+ * Responds with status 201 on sucess.
  *
  * @param req - Express request object containing a validated work experience payload
  * @param res - Express response object
@@ -42,13 +42,17 @@ export async function insertWorkExperience(
 ): Promise<void> {
   try {
     await workExperienceService.createWorkExperience(req);
-    res.status(201).json({ message: "Work experience inserted successfully" });
+    res.status(201).end();
   } catch (error: any) {
     if (error instanceof DomainError) {
-      res.status(error.statusCode).json({ error: error.message });
+      res
+        .status(error.statusCode)
+        .json({ field: error.field, message: error.message });
     } else {
       console.error("Error inserting workExperience data:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ field: "server", message: "Internal Server Error" });
     }
   }
 }
@@ -73,10 +77,14 @@ export async function updateWorkExperience(
     res.status(204).end();
   } catch (error: any) {
     if (error instanceof DomainError) {
-      res.status(error.statusCode).json({ error: error.message });
+      res
+        .status(error.statusCode)
+        .json({ field: error.field, message: error.message });
     } else {
       console.error("Error updating workExperience data:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ field: "server", message: "Internal Server Error" });
     }
   }
 }
@@ -101,10 +109,14 @@ export async function deleteWorkExperience(
     res.status(204).end();
   } catch (error: any) {
     if (error instanceof DomainError) {
-      res.status(error.statusCode).json({ error: error.message });
+      res
+        .status(error.statusCode)
+        .json({ field: error.field, message: error.message });
     } else {
       console.error("Error deleteing workExperience data:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ field: "server", message: "Internal Server Error" });
     }
   }
 }

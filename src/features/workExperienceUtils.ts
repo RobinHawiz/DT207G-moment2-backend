@@ -15,8 +15,9 @@ import {
 export function toDbPayload(
   data: WorkExperienceEntity | WorkExperiencePayload
 ): WorkExperienceDbPayload {
-  if (data.startDate > data.endDate)
-    throw new DomainError("Start date must be before end date.");
+  if (data.startDate > data.endDate) {
+    throw new DomainError("startDate", "Start date must be before end date.");
+  }
 
   return {
     ...data,
