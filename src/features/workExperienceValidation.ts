@@ -18,9 +18,31 @@ import { formatZodError } from "../errors/formatZodError";
 
 export const WorkExperienceSchema = z
   .object({
-    companyName: z.string().min(1).max(100),
-    jobTitle: z.string().min(1).max(100),
-    workCityLocation: z.string().min(1).max(100),
+    companyName: z
+      .string()
+      .min(1, {
+        message: "The company name has to be at least 1 character long.",
+      })
+      .max(100, {
+        message: "The company name cannot exceed 100 characters.",
+      }),
+    jobTitle: z
+      .string()
+      .min(1, {
+        message: "The job title has to be at least 1 character long.",
+      })
+      .max(100, {
+        message: "The job title cannot exceed 100 characters.",
+      }),
+    workCityLocation: z
+      .string()
+      .min(1, {
+        message:
+          "The work city location name has to be at least 1 character long.",
+      })
+      .max(100, {
+        message: "The work city location name cannot exceed 100 characters.",
+      }),
     startDate: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, {
@@ -39,7 +61,14 @@ export const WorkExperienceSchema = z
         message: "Invalid date.",
       })
       .transform((val) => new Date(val)),
-    description: z.string().min(1).max(1000),
+    description: z
+      .string()
+      .min(1, {
+        message: "The description has to be at least 1 character long.",
+      })
+      .max(1000, {
+        message: "The description cannot exceed 1000 characters.",
+      }),
   })
   .strict();
 
