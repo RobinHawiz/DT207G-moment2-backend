@@ -78,21 +78,27 @@ Deployed on **Azure App Service**
 
 The database consists of a single `WorkExperiences` table, structured as follows:
 
-| Column       | Type         | Description              |
-|--------------|--------------|--------------------------|
-| `Id`         | `INT`        | Primary key (auto-increment) |
-| `CompanyName`| `TEXT`       | Name of the company      |
-| `JobTitle`   | `TEXT`       | Name of the Job title    |
-| `StartDate`  | `TEXT`       | Job start date           |
-| `EndDate`    | `TEXT`       | Job end date             |
-| `Description`| `TEXT`       | Job description          |
+| Column              | Type   | Description                             |
+|---------------------|--------|-----------------------------------------|
+| `Id`                | `INT`  | Primary key (auto-increment)            |
+| `CompanyName`       | `TEXT` | Name of the company                     |
+| `JobTitle`          | `TEXT` | Title of the job                        |
+| `WorkCityLocation`  | `TEXT` | City where the work took place          |
+| `StartDate`         | `TEXT` | Starting date of the position           |
+| `EndDate`           | `TEXT` | Ending date of the position             |
+| `Description`       | `TEXT` | Summary of responsibilities or tasks    |
 
 ---
 
 ## 📡 API Endpoints
 
-### `GET /work-experience`
+### `GET /api/work-experience`
 Returns all work experiences from the database.
+
+#### Example request:
+```
+GET /api/work-experience
+```
 
 #### Response:
 - Status code: `200 OK`
@@ -111,10 +117,16 @@ Returns all work experiences from the database.
 ]
 ```
 
-### `POST /work-experience/insert`
+### `POST /api/work-experience`
 
 - Adds a new work experience.
-- **Request Body** (must include a validated `companyName`, `jobTitle`, `startDate`, `endDate`, and `description`)
+- **Request Body** (must include a validated `companyName`, `jobTitle`, `workCityLocation`, `startDate`, `endDate`, and `description`)
+
+#### Example request:
+```
+POST /api/work-experience
+Content-Type: application/json
+```
 
 #### Request body example:
 ```json
@@ -128,24 +140,23 @@ Returns all work experiences from the database.
 }
 ```
 #### Response:
-- Response: `201 Created`
-- Body:
-```json
-{
-  "message": "Work experience inserted successfully"
-}
+- Status code: `201 Created`
+
+### `PUT /api/work-experience/:id`
+
+- Updates an existing work experience by its ID.
+- The `id` must be passed as a route parameter (i.e., in the URL).
+- **Request Body** (must include a validated `companyName`, `jobTitle`, `workCityLocation`, `startDate`, `endDate`, and `description`)
+
+#### Example request:
 ```
-
-
-### `PUT /work-experience/update`
-
-- Updates an existing work experience.
-- **Request Body** (must include a validated `id`, `companyName`, `jobTitle`, `startDate`, `endDate`, and `description`)
+PUT /api/work-experience/1
+Content-Type: application/json
+```
 
 #### Request body example:
 ```json
 {
-    "id": 1,
     "companyName": "Prisma",
     "jobTitle": "DBA",
     "workCityLocation": "New York",
@@ -154,22 +165,22 @@ Returns all work experiences from the database.
     "description": "Worked with maintaining the company db."
 }
 ```
+
 #### Response:
-- Response: `204 No Content`
+- Status code: `204 No Content`
 
-### `DELETE /work-experience/delete`
+### `DELETE /api/work-experience/:id`
 
-- Deletes a work experience by Id.
-- **Request Body** (must include a validated numeric `id`)
+- Deletes a work experience by its ID.
+- The `id` must be passed as a route parameter (i.e., in the URL).
 
-Request body example:
-```json
-{
-  "id": 1
-}
+#### Example request:
 ```
+DELETE /api/work-experience/1
+```
+
 #### Response:
-- Response: `204 No Content`
+- Status code: `204 No Content`
 
 ---
 
