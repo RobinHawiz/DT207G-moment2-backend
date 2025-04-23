@@ -1,8 +1,9 @@
 import {
   WorkExperienceEntity,
-  WorkExperienceDbPayload,
+  WorkExperiencePayload,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
+import { toDbPayload } from "./workExperienceUtils";
 
 /**
  * SQLite implementation of the work experience repository interface.
@@ -25,12 +26,13 @@ export class SQLiteWorkExperienceRepository
     return rows;
   }
 
-  insert(data: WorkExperienceDbPayload): Promise<void> {
+  insert(payload: WorkExperiencePayload): Promise<void> {
     try {
       const statement = this.dbConnection
         .prepare(`insert into WorkExperiences (CompanyName, JobTitle, WorkCityLocation, StartDate, EndDate, Description)
                   values(@companyName, @jobTitle, @workCityLocation, @startDate, @endDate, @description)`);
-      statement.run(data);
+      const dbPayload = toDbPayload(payload);
+      statement.run(dbPayload);
       return Promise.resolve();
     } catch (error) {
       console.error("Database insertion error:", error);
@@ -38,10 +40,11 @@ export class SQLiteWorkExperienceRepository
     }
   }
 
-  update(id: number, data: WorkExperienceDbPayload): Promise<void> {
+  update(id: number, payload: WorkExperiencePayload): Promise<void> {
+    const dbPayload = toDbPayload(payload);
     try {
       const params = {
-        ...data,
+        ...dbPayload,
         id,
       };
       const statement = this.dbConnection.prepare(

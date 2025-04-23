@@ -3,7 +3,6 @@ import {
   WorkExperienceEntity,
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
-import { toDbPayload } from "./workExperienceUtils";
 import { DomainError } from "../errors/domainError";
 
 /**
@@ -37,8 +36,10 @@ export class WorkExperienceService {
    * @throws DomainError if startDate is after endDate
    */
   async createWorkExperience(payload: WorkExperiencePayload): Promise<void> {
-    const dbPayload = toDbPayload(payload);
-    await this.repo.insert(dbPayload);
+    if (payload.startDate > payload.endDate) {
+      throw new DomainError("startDate", "Start date must be before end date.");
+    }
+    await this.repo.insert(payload);
   }
 
   /**
@@ -53,6 +54,10 @@ export class WorkExperienceService {
     id: number,
     payload: WorkExperiencePayload
   ): Promise<void> {
+    if (payload.startDate > payload.endDate) {
+      throw new DomainError("startDate", "Start date must be before end date.");
+    }
+
     const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
       throw new DomainError(
@@ -60,8 +65,8 @@ export class WorkExperienceService {
         "The work experience with this Id does not exist!"
       );
     }
-    const dbPayload = toDbPayload(payload);
-    await this.repo.update(id, dbPayload);
+
+    await this.repo.update(id, payload);
   }
 
   /**

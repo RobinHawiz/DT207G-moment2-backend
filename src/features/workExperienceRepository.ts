@@ -1,6 +1,6 @@
 import {
   WorkExperienceEntity,
-  WorkExperienceDbPayload,
+  WorkExperiencePayload,
 } from "../models/workExperienceEntity";
 
 /**
@@ -22,18 +22,18 @@ export interface WorkExperienceRepository {
   /**
    * Inserts a new work experience into the database.
    *
-   * @param data - A validated work experience db payload containing required fields.
+   * @param payload - A validated work experience payload containing required fields.
    * @throws If the database operation fails
    */
-  insert(data: WorkExperienceDbPayload): Promise<void>;
+  insert(payload: WorkExperiencePayload): Promise<void>;
   /**
    * Updates an existing work experience in the database.
    *
    * @param id - The ID of the work experience to update.
-   * @param data - A validated work experience db payload containing required fields.
+   * @param payload - A validated work experience payload containing required fields.
    * @throws If the database operation fails
    */
-  update(id: number, data: WorkExperienceDbPayload): Promise<void>;
+  update(id: number, payload: WorkExperiencePayload): Promise<void>;
   /**
    * Deletes a work experience from the database by ID.
    *
