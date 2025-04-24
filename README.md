@@ -12,6 +12,14 @@ For this project, only SQLite is used, but it's written with future-proofing in 
 Also, the next assignment requires MongoDB for data persistence, which this project can easily support by just adding a custom repository layer. Nothing else needs to change. 
 Well, aside from the fact that I no longer need to deal with date string conversions, thanks to MongoDB’s support for native Date objects.
 
+## MongoDB migration
+
+Switching from SQLite to MongoDB took more work than I initially expected, but that’s on me for not setting up a clean architecture from the start. For example, my service layer was directly tied to the SQLite repository because it was formatting payloads specifically for SQLite. That logic clearly belonged in the repository layer, not the service. Another major change was updating the `id` field in the work experience entity from `number` to `string`, since MongoDB uses string-based ObjectIds. That single change cascaded through both the backend and frontend, but this made the eventual MongoDB integration much cleaner.
+
+I also had to learn how to use the node library Mongoose, which went suprisingly smooth. You just write a line of code and you've successfully done one of the CRUD operations (after defining a schema and creating a model). Although there was some figuring out to do regarding how to get data back properly because I was getting full Mongoose model instances with a lot of metadata. This was solved by using the `lean()` method, which returns plain JavaScript objects. From there, I simply mapped `_id` to `id` to fit my frontend's expectations.
+
+Finally, I reused the same frontend from the previous assignment. Since the goal was to create the same API but with MongoDB. But having said that, having interfaces and models that both my backend and frontend followed helped immensely, because it made sure that any breaking changes were caught at compile time. So type safety made the migration far less painful than it could have been.
+
 ---
 
 ## 🧱 Project Structure
@@ -68,6 +76,7 @@ Deployed on **Azure App Service**
 - **Node.js** / **Express**
 - **TypeScript**
 - **SQLite** (via `better-sqlite3`)
+- **MongoDB** (via `Mongoose`) (Current DB)
 - **Zod**
 - **Azure App Service** (deployment target)
 - **GitHub Actions** (CI/CD pipeline)
