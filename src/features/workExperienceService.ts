@@ -4,6 +4,7 @@ import {
 } from "../models/workExperienceEntity";
 import { WorkExperienceRepository } from "./workExperienceRepository";
 import { DomainError } from "../errors/domainError";
+import mongoose from "mongoose";
 
 /**
  * Service layer for handling business logic related to work experience entities.
@@ -76,6 +77,13 @@ export class WorkExperienceService {
    * @throws DomainError if the work experience does not exist
    */
   async deleteWorkExperience(id: string): Promise<void> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new DomainError(
+        "id",
+        "The work experience with this Id does not exist!"
+      );
+    }
+
     const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
       throw new DomainError(

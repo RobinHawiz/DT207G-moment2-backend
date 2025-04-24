@@ -7,20 +7,24 @@ import {
   deleteWorkExperience,
 } from "./workExperienceController";
 import { validate, WorkExperienceSchema } from "./workExperienceValidation";
-import { SQLiteWorkExperienceRepository } from "./sqliteWorkExperienceRepository";
 import { WorkExperiencePayload } from "../models/workExperienceEntity";
+import { WorkExperienceDocument } from "../models/workExperienceModel";
+import { Model } from "mongoose";
+import { MongoDbWorkExperienceRepository } from "./mongodbWorkExperienceRepository";
 
 /**
  * Factory function to create work experience related API routes.
  *
  */
 export function workExperienceRoutes(
-  db: import("better-sqlite3").Database
+  db: Model<WorkExperienceDocument>
 ): Router {
   const router = Router();
-  const sqliteWorkExperienceRepository = new SQLiteWorkExperienceRepository(db);
+  const mongodbWorkExperienceRepository = new MongoDbWorkExperienceRepository(
+    db
+  );
   const workExperienceService = new WorkExperienceService(
-    sqliteWorkExperienceRepository
+    mongodbWorkExperienceRepository
   );
 
   /**

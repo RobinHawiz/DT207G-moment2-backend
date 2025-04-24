@@ -1,8 +1,9 @@
 import "./config/env"; // Import environment variables before any other modules touch process.env.
 import express, { Express } from "express";
 import cors from "cors";
-import { corsOptions, connectToSQLiteDb } from "./config/index";
+import { corsOptions, connectToMongoDb } from "./config/index";
 import { workExperienceRoutes } from "./features/workExperienceRoutes";
+import { WorkExperienceModel } from "./models/workExperienceModel";
 
 /**
  * Initializes the Express application with all middleware and route handlers.
@@ -18,8 +19,8 @@ import { workExperienceRoutes } from "./features/workExperienceRoutes";
 export async function createApp(): Promise<Express> {
   const app = express();
   // Connect to db
-  const dbConnection = await connectToSQLiteDb();
-  const routes = workExperienceRoutes(dbConnection);
+  await connectToMongoDb();
+  const routes = workExperienceRoutes(WorkExperienceModel);
   // Middlewares
   app.use(cors(corsOptions));
   app.use(express.json());
