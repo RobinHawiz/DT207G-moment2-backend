@@ -23,7 +23,11 @@ export class SQLiteWorkExperienceRepository
         "select Id as id, CompanyName as companyName, JobTitle as jobTitle, WorkCityLocation as workCityLocation, StartDate as startDate, EndDate as endDate, Description as description from WorkExperiences"
       )
       .all() as Array<WorkExperienceEntity>;
-    return rows;
+    const output: Array<WorkExperienceEntity> = rows.map((row) => ({
+      ...row,
+      id: row.id.toString(),
+    }));
+    return output;
   }
 
   insert(payload: WorkExperiencePayload): Promise<void> {
@@ -40,7 +44,7 @@ export class SQLiteWorkExperienceRepository
     }
   }
 
-  update(id: number, payload: WorkExperiencePayload): Promise<void> {
+  update(id: string, payload: WorkExperiencePayload): Promise<void> {
     const dbPayload = toDbPayload(payload);
     try {
       const params = {
@@ -60,7 +64,7 @@ export class SQLiteWorkExperienceRepository
     }
   }
 
-  deleteById(id: number): Promise<void> {
+  deleteById(id: string): Promise<void> {
     try {
       const statement = this.dbConnection.prepare(
         `delete from WorkExperiences where Id = @id`
@@ -73,7 +77,7 @@ export class SQLiteWorkExperienceRepository
     }
   }
 
-  exists(id: number): Promise<boolean> {
+  exists(id: string): Promise<boolean> {
     try {
       const statement = this.dbConnection.prepare(
         `select * from WorkExperiences where Id = @id`

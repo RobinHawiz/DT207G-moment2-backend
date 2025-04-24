@@ -1,9 +1,9 @@
 /**
- * Represents a single work experience entry stored in the database.
+ * Represents a single work experience entry stored in a database.
  */
 export type WorkExperienceEntity = {
-  /** Auto-incremented unique identifier */
-  id: number;
+  /** Unique identifier */
+  id: string;
   /** Company name */
   companyName: string;
   /** Job title */

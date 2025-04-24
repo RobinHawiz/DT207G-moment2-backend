@@ -74,7 +74,7 @@ export async function updateWorkExperience(
   workExperienceService: WorkExperienceService
 ): Promise<void> {
   try {
-    const id = Number(req.params.id);
+    const id = req.params.id;
     await workExperienceService.updateWorkExperience(id, req.body);
     res.status(204).end();
   } catch (error: any) {
@@ -107,7 +107,7 @@ export async function deleteWorkExperience(
   workExperienceService: WorkExperienceService
 ): Promise<void> {
   try {
-    const id = Number(req.params.id);
+    const id = req.params.id;
     await workExperienceService.deleteWorkExperience(id);
     res.status(204).end();
   } catch (error: any) {

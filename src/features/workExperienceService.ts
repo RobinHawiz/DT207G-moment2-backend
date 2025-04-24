@@ -26,7 +26,7 @@ export class WorkExperienceService {
    * @returns An array of work experience records
    */
   async getAllWorkExperiences(): Promise<Array<WorkExperienceEntity>> {
-    return this.repo.findAll();
+    return await this.repo.findAll();
   }
 
   /**
@@ -45,13 +45,13 @@ export class WorkExperienceService {
   /**
    * Updates an existing work experience if it exists in the database using a payload.
    *
-   * @param id - A numeric work experience ID
+   * @param id - A work experience ID
    * @param payload - A validated work experience payload
    * @throws DomainError if startDate is after endDate
    * @throws DomainError if the work experience does not exist
    */
   async updateWorkExperience(
-    id: number,
+    id: string,
     payload: WorkExperiencePayload
   ): Promise<void> {
     if (payload.startDate > payload.endDate) {
@@ -72,10 +72,10 @@ export class WorkExperienceService {
   /**
    * Deletes a work experience if it exists in the database.
    *
-   * @param id - A numeric work experience ID
+   * @param id - A work experience ID
    * @throws DomainError if the work experience does not exist
    */
-  async deleteWorkExperience(id: number): Promise<void> {
+  async deleteWorkExperience(id: string): Promise<void> {
     const workExperienceExists: boolean = await this.repo.exists(id);
     if (!workExperienceExists) {
       throw new DomainError(

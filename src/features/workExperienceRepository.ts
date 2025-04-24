@@ -33,14 +33,14 @@ export interface WorkExperienceRepository {
    * @param payload - A validated work experience payload containing required fields.
    * @throws If the database operation fails
    */
-  update(id: number, payload: WorkExperiencePayload): Promise<void>;
+  update(id: string, payload: WorkExperiencePayload): Promise<void>;
   /**
    * Deletes a work experience from the database by ID.
    *
    * @param id - The ID of the work experience to delete.
    * @throws If the database operation fails
    */
-  deleteById(id: number): Promise<void>;
+  deleteById(id: string): Promise<void>;
   /**
    * Checks if a work experience exists in the database by ID.
    *
@@ -48,5 +48,5 @@ export interface WorkExperienceRepository {
    * @returns A boolean indicating whether the work experience exists.
    * @throws If the database operation fails
    */
-  exists(id: number): Promise<boolean>;
+  exists(id: string): Promise<boolean>;
 }
